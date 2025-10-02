@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import VideoModal from '../components/VideoModal';
-import BookingModal from '../components/BookingModal';
+import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 const screens = [
   {
@@ -42,29 +42,19 @@ const screens = [
 ];
 
 const Screens = () => {
-  const [selectedScreen, setSelectedScreen] = useState(null);
-  const [showVideo, setShowVideo] = useState(false);
-  const [showBooking, setShowBooking] = useState(false);
+  const navigate = useNavigate();
 
-  const handleBookNow = (screen) => {
-    setSelectedScreen(screen);
-    setShowVideo(true);
-  };
-
-  const handleVideoComplete = () => {
-    setShowVideo(false);
-    setShowBooking(true);
-  };
-
-  const handleBookingClose = () => {
-    setShowBooking(false);
-    setSelectedScreen(null);
+  const handleBrowse = (screen) => {
+    // Optionally pass screen id or data via state or params
+    navigate('/location-details');
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-dark-900 pt-20">
-      {/* Header */}
-      <div className="container-max section-padding">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-white dark:bg-dark-900 pt-20">
+        {/* Header */}
+        <div className="container-max section-padding">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -130,17 +120,17 @@ const Screens = () => {
                   {screen.description}
                 </p>
 
-                {/* Book Now Button */}
+                {/* Browse Button */}
                 <motion.button
                   whileHover={{ 
                     scale: 1.02,
                     boxShadow: "0 0 25px rgba(239, 68, 68, 0.4)"
                   }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => handleBookNow(screen)}
+                  onClick={() => handleBrowse(screen)}
                   className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 shadow-lg hover:shadow-red-500/30"
                 >
-                  Book Now
+                  Browse
                 </motion.button>
               </div>
             </motion.div>
@@ -173,22 +163,10 @@ const Screens = () => {
         </motion.div>
       </div>
 
-      {/* Video Modal */}
-      <VideoModal
-        isOpen={showVideo}
-        onClose={() => setShowVideo(false)}
-        onComplete={handleVideoComplete}
-        screen={selectedScreen}
-      />
-
-      {/* Booking Modal */}
-      <BookingModal
-        isOpen={showBooking}
-        onClose={handleBookingClose}
-        screen={selectedScreen}
-      />
+      {/* Removed VideoModal and BookingModal for browse flow */}
     </div>
+    </>
   );
-};
+}
 
 export default Screens;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import BookingModal from '../components/BookingModal';
+import Navbar from '../components/Navbar';
 
 const images = [
   'https://i.pinimg.com/1200x/d3/94/5b/d3945b05924c9306b7935cc40429a2c2.jpg',
@@ -22,12 +23,14 @@ const Dashboard = () => {
   const [selected, setSelected] = useState(null);
 
   return (
-    <div className="min-h-screen theme-bg section-padding">
-      <div className="container-max">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold theme-text">Available Screens</h1>
-          <p className="theme-text-secondary">Pick a screen to start your booking</p>
-        </div>
+    <>
+      <Navbar />
+      <div className="min-h-screen theme-bg section-padding">
+        <div className="container-max">
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-bold theme-text">Available Screens</h1>
+            <p className="theme-text-secondary">Pick a screen to start your booking</p>
+          </div>
 
         <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {screens.map((s, idx) => (
@@ -62,7 +65,8 @@ const Dashboard = () => {
 
       <BookingModal isOpen={open} onClose={() => setOpen(false)} screen={selected} />
     </div>
+    </>
   );
-};
+}
 
 export default Dashboard;

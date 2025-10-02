@@ -4,6 +4,8 @@ import { Link } from 'react-scroll';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 const LogoCube = () => {
   const meshRef = useRef();
   useFrame((_, delta) => {
@@ -11,6 +13,7 @@ const LogoCube = () => {
     meshRef.current.rotation.x += delta * 0.2;
     meshRef.current.rotation.y += delta * 0.15;
   });
+
   return (
     <mesh ref={meshRef} rotation={[Math.PI / 6, Math.PI / 4, 0]} scale={0.6}>
       <boxGeometry args={[1, 1, 1]} />
@@ -28,16 +31,17 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const pathname = location.pathname;
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
 
   const navItems = [
     { name: 'Home', to: 'hero' },
@@ -51,97 +55,124 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+  className={`sticky top-0 w-full z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/90 dark:bg-dark-900/90 backdrop-blur-md shadow-lg'
-          : 'bg-transparent'
+          ? 'bg-white/95 dark:bg-dark-900/90 backdrop-blur-md shadow-lg'
+          : 'bg-white dark:bg-dark-900'
       }`}
     >
       <div className="container-max">
         <div className="flex items-center justify-between py-4">
           {/* Logo with 3D cube */}
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8">
+            <div className="h-8 w-8 cursor-pointer" onClick={() => navigate('/') }>
               <Canvas camera={{ position: [0, 0, 3] }}>
                 <ambientLight intensity={0.7} />
                 <directionalLight position={[2, 4, 2]} intensity={1} />
                 <LogoCube />
               </Canvas>
             </div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="text-2xl font-bold gradient-text"
-            >
-              RedTheme
+            <motion.div whileHover={{ scale: 1.05 }} className="text-2xl font-bold gradient-text cursor-pointer" onClick={() => navigate('/') }>
+              ADScape
             </motion.div>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <motion.div
-                key={item.name}
-                whileHover={{ y: -2 }}
-                className="relative"
-              >
-                <Link
-                  to={item.to}
-                  smooth={true}
-                  duration={500}
-                  className={`cursor-pointer font-medium transition-colors duration-300 relative ${
-                    isScrolled
-                      ? 'text-gray-900 dark:text-white hover:text-primary-600'
-                      : 'text-white hover:text-primary-300'
-                  }`}
-                  activeClass="text-primary-600"
-                  spy={true}
-                  offset={-80}
-                >
-                  {item.name}
-                  <motion.div
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary-600 origin-left"
-                    initial={{ scaleX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </Link>
-              </motion.div>
-            ))}
-            
-            {/* Dark Mode Toggle */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={toggleTheme}
-              className={`p-2 rounded-lg transition-colors duration-300 ${
-                isScrolled
-                  ? 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-dark-800'
-                  : 'text-white hover:bg-white/10'
-              }`}
-              aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              <motion.div
-                key={isDarkMode ? 'dark' : 'light'}
-                initial={{ rotate: -180, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 180, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {isDarkMode ? (
-                  <Sun className="w-5 h-5" />
-                ) : (
-                  <Moon className="w-5 h-5" />
-                )}
-              </motion.div>
-            </motion.button>
+            {pathname.startsWith('/screens') ? (
+              <>
+                <motion.div whileHover={{ y: -2 }} className="relative">
+                  <span
+                    className="cursor-pointer font-medium text-gray-900 dark:text-white transition-colors duration-300 relative"
+                    onClick={() => navigate('/')}
+                  >
+                    Home
+                  </span>
+                </motion.div>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-glow"
-            >
-              Get Started
-            </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={toggleTheme}
+                  className="p-2 rounded-lg transition-colors duration-300 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-dark-800"
+                  aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                >
+                  <motion.div
+                    key={isDarkMode ? 'dark' : 'light'}
+                    initial={{ rotate: -180, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 180, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                  </motion.div>
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="ml-4 px-6 py-2 rounded-full bg-black text-white border border-red-600 hover:bg-red-600 hover:text-white font-semibold transition-all duration-300"
+                  onClick={() => {
+                    navigate('/');
+                  }}
+                >
+                  Sign Out
+                </motion.button>
+              </>
+            ) : (
+              <>
+                {navItems.map((item) => (
+                  <motion.div key={item.name} whileHover={{ y: -2 }} className="relative">
+                    <Link
+                      to={item.to}
+                      smooth={true}
+                      duration={500}
+                      className="cursor-pointer font-medium transition-colors duration-300 relative text-gray-900 dark:text-white"
+                      activeClass="text-primary-600"
+                      spy={true}
+                      offset={-80}
+                    >
+                      {item.name}
+                      <motion.div
+                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary-600 origin-left"
+                        initial={{ scaleX: 0 }}
+                        whileHover={{ scaleX: 1 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    </Link>
+                  </motion.div>
+                ))}
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={toggleTheme}
+                  className="p-2 rounded-lg transition-colors duration-300 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-dark-800"
+                  aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                >
+                  <motion.div
+                    key={isDarkMode ? 'dark' : 'light'}
+                    initial={{ rotate: -180, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 180, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                  </motion.div>
+                </motion.button>
+
+                {pathname === '/' && (
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="btn-glow"
+                    onClick={() => navigate('/auth')}
+                  >
+                    Get Started
+                  </motion.button>
+                )}
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -150,9 +181,7 @@ const Navbar = () => {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={toggleTheme}
-              className={`p-2 rounded-lg ${
-                isScrolled ? 'text-gray-900 dark:text-white' : 'text-white'
-              }`}
+              className={`p-2 rounded-lg ${isScrolled ? 'text-gray-900 dark:text-white' : 'text-white'}`}
               aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               <motion.div
@@ -162,27 +191,16 @@ const Navbar = () => {
                 exit={{ rotate: 180, opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                {isDarkMode ? (
-                  <Sun className="w-5 h-5" />
-                ) : (
-                  <Moon className="w-5 h-5" />
-                )}
+                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </motion.div>
             </motion.button>
 
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`p-2 rounded-lg ${
-                isScrolled ? 'text-gray-900 dark:text-white' : 'text-white'
-              }`}
+              className={`p-2 rounded-lg ${isScrolled ? 'text-gray-900 dark:text-white' : 'text-white'}`}
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -197,10 +215,7 @@ const Navbar = () => {
         {/* Mobile Menu */}
         <motion.div
           initial={{ opacity: 0, height: 0 }}
-          animate={{
-            opacity: isMobileMenuOpen ? 1 : 0,
-            height: isMobileMenuOpen ? 'auto' : 0,
-          }}
+          animate={{ opacity: isMobileMenuOpen ? 1 : 0, height: isMobileMenuOpen ? 'auto' : 0 }}
           transition={{ duration: 0.3 }}
           className="md:hidden overflow-hidden"
         >
@@ -218,7 +233,7 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="px-4 pt-4">
-              <button className="w-full btn-glow">
+              <button className="w-full btn-glow" onClick={() => navigate('/auth')}>
                 Get Started
               </button>
             </div>

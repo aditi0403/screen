@@ -70,7 +70,7 @@ const Hero = () => {
             >
               Book Your Ads Across
               <span className="block bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
-                Jabalpur's Prime Screens
+                ScreenD's Prime Screens
               </span>
             </motion.h1>
             

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import AuthModal from '../components/AuthModal';
 
@@ -67,7 +67,7 @@ const AuthPage = () => {
         >
           Welcome to
           <span className="block bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
-            AdScreen Booking
+            ScreenD Booking
           </span>
         </motion.h1>
 
