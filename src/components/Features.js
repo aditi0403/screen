@@ -87,15 +87,15 @@ const FeatureCard = ({ title, description, image, icon, delay = 0, reverse = fal
               >
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
-                  <span className="theme-text-secondary">Advanced performance optimization</span>
+                  <span className="theme-text-secondary">Maximum brand visibility</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
-                  <span className="theme-text-secondary">Seamless user experience</span>
+                  <span className="theme-text-secondary">Real-time campaign tracking</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
-                  <span className="theme-text-secondary">Enterprise-grade security</span>
+                  <span className="theme-text-secondary">Instant ad deployment</span>
                 </div>
               </motion.div>
 
@@ -161,7 +161,7 @@ const Features = () => {
           >
             Why Choose Our
             <span className="block gradient-text">
-              Platform?
+              Ad-Screen Platform?
             </span>
           </motion.h2>
           
@@ -172,8 +172,8 @@ const Features = () => {
             viewport={{ once: true }}
             className="section-subtitle"
           >
-            Discover the powerful features that make our platform the perfect choice for modern web development. 
-            Built with cutting-edge technology and designed for the future.
+            Experience the most advanced digital billboard booking system in Jabalpur. 
+            Designed for brands who want maximum visibility and seamless campaign management.
           </motion.p>
         </div>
       </motion.div>
@@ -202,10 +202,10 @@ const Features = () => {
         <div className="container-max">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
-              { number: "50K+", label: "Happy Customers" },
-              { number: "99.9%", label: "Uptime" },
-              { number: "24/7", label: "Support" },
-              { number: "150+", label: "Countries" }
+              { number: "5", label: "Prime Locations" },
+              { number: "24/7", label: "Visibility" },
+              { number: "1M+", label: "Daily Views" },
+              { number: "100%", label: "Digital" }
             ].map((stat, index) => (
               <motion.div
                 key={index}

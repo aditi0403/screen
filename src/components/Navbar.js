@@ -79,22 +79,33 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <Link
+              <motion.div
                 key={item.name}
-                to={item.to}
-                smooth={true}
-                duration={500}
-                className={`cursor-pointer font-medium transition-colors duration-300 ${
-                  isScrolled
-                    ? 'theme-text hover:text-primary-600'
-                    : 'text-white hover:text-primary-300'
-                }`}
-                activeClass="text-primary-600"
-                spy={true}
-                offset={-80}
+                whileHover={{ y: -2 }}
+                className="relative"
               >
-                {item.name}
-              </Link>
+                <Link
+                  to={item.to}
+                  smooth={true}
+                  duration={500}
+                  className={`cursor-pointer font-medium transition-colors duration-300 relative ${
+                    isScrolled
+                      ? 'text-gray-900 dark:text-white hover:text-primary-600'
+                      : 'text-white hover:text-primary-300'
+                  }`}
+                  activeClass="text-primary-600"
+                  spy={true}
+                  offset={-80}
+                >
+                  {item.name}
+                  <motion.div
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary-600 origin-left"
+                    initial={{ scaleX: 0 }}
+                    whileHover={{ scaleX: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </Link>
+              </motion.div>
             ))}
             
             {/* Dark Mode Toggle */}
@@ -104,7 +115,7 @@ const Navbar = () => {
               onClick={toggleTheme}
               className={`p-2 rounded-lg transition-colors duration-300 ${
                 isScrolled
-                  ? 'theme-text hover:bg-gray-100 dark:hover:bg-dark-800'
+                  ? 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-dark-800'
                   : 'text-white hover:bg-white/10'
               }`}
               aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
@@ -140,7 +151,7 @@ const Navbar = () => {
               whileTap={{ scale: 0.95 }}
               onClick={toggleTheme}
               className={`p-2 rounded-lg ${
-                isScrolled ? 'theme-text' : 'text-white'
+                isScrolled ? 'text-gray-900 dark:text-white' : 'text-white'
               }`}
               aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
@@ -163,7 +174,7 @@ const Navbar = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`p-2 rounded-lg ${
-                isScrolled ? 'theme-text' : 'text-white'
+                isScrolled ? 'text-gray-900 dark:text-white' : 'text-white'
               }`}
             >
               <svg
@@ -201,7 +212,7 @@ const Navbar = () => {
                 smooth={true}
                 duration={500}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block px-4 py-2 theme-text hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors duration-300"
+                className="block px-4 py-2 text-gray-900 dark:text-white hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors duration-300"
               >
                 {item.name}
               </Link>

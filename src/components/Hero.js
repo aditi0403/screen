@@ -79,7 +79,7 @@ const Hero = ({ onOpenAuth }) => {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-xl md:text-2xl text-gray-800 dark:text-gray-300 mb-12 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
             >
-              Register your brand, pick your screen, choose time slots, and get your ads live instantly.
+              Seamlessly register, pick your location, choose your slots, and get your ads live.
             </motion.p>
             
             {/* Call-to-Action Button */}
@@ -101,6 +101,18 @@ const Hero = ({ onOpenAuth }) => {
                   boxShadow: "0 0 30px rgba(239, 68, 68, 0.5)"
                 }}
                 whileTap={{ scale: 0.95 }}
+                animate={{ 
+                  boxShadow: [
+                    "0 0 20px rgba(239, 68, 68, 0.3)",
+                    "0 0 40px rgba(239, 68, 68, 0.6)",
+                    "0 0 20px rgba(239, 68, 68, 0.3)"
+                  ]
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
                 className="bg-red-600 hover:bg-red-700 text-white font-bold text-xl px-12 py-5 rounded-full transition-all duration-300 shadow-lg hover:shadow-red-500/50"
               >
                 Get Started

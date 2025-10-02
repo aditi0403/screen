@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const TabButton = ({ active, children, onClick }) => (
   <button
@@ -36,6 +37,7 @@ const ModalBackdrop = ({ onClose, children }) => (
 );
 
 const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
+  const navigate = useNavigate();
   const [tab, setTab] = useState('login');
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({ brand: '', email: '', password: '', confirm: '' });
@@ -47,7 +49,7 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
     setTimeout(() => {
       setLoading(false);
       onClose?.();
-      onLoginSuccess?.();
+      navigate('/screens');
     }, 800);
   };
 
@@ -59,7 +61,7 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
       setLoading(false);
       // After signup, auto-log in for demo
       onClose?.();
-      onLoginSuccess?.();
+      navigate('/screens');
     }, 1000);
   };
 

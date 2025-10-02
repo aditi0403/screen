@@ -6,7 +6,9 @@ import Features from './components/Features';
 import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import AuthOverlay from './components/AuthOverlay';
 import AuthModal from './components/AuthModal';
+import Screens from './pages/Screens';
 import Dashboard from './pages/Dashboard';
 import Payment from './pages/Payment';
 
@@ -24,25 +26,43 @@ const Landing = ({ onOpenAuth }) => (
 );
 
 function App() {
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isAuthOverlayOpen, setIsAuthOverlayOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const handleLoginClick = () => {
+    setIsAuthOverlayOpen(false);
+    setIsAuthModalOpen(true);
+  };
+
+  const handleSignupClick = () => {
+    setIsAuthOverlayOpen(false);
+    setIsAuthModalOpen(true);
+  };
 
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path="/"
-          element={<Landing onOpenAuth={() => setIsAuthOpen(true)} />}
+          element={<Landing onOpenAuth={() => setIsAuthOverlayOpen(true)} />}
         />
+        <Route path="/screens" element={<Screens />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/payment" element={<Payment />} />
       </Routes>
 
+      <AuthOverlay
+        isOpen={isAuthOverlayOpen}
+        onClose={() => setIsAuthOverlayOpen(false)}
+        onLoginClick={handleLoginClick}
+        onSignupClick={handleSignupClick}
+      />
+
       <AuthModal
-        isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
         onLoginSuccess={() => {
-          setIsAuthOpen(false);
-          window.location.href = '/dashboard';
+          setIsAuthModalOpen(false);
         }}
       />
     </BrowserRouter>
