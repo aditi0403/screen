@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -36,12 +36,16 @@ const ModalBackdrop = ({ onClose, children }) => (
   </motion.div>
 );
 
-const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
+const AuthModal = ({ isOpen, onClose, onLoginSuccess, initialTab = 'login' }) => {
   const navigate = useNavigate();
-  const [tab, setTab] = useState('login');
+  const [tab, setTab] = useState(initialTab);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({ brand: '', email: '', password: '', confirm: '' });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setTab(initialTab);
+  }, [initialTab]);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();

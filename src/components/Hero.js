@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const RotatingCube = () => {
   const meshRef = useRef();
@@ -31,7 +32,8 @@ const RotatingCube = () => {
   );
 };
 
-const Hero = ({ onOpenAuth }) => {
+const Hero = () => {
+  const navigate = useNavigate();
   return (
     <section id="hero" className="relative h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -95,7 +97,7 @@ const Hero = ({ onOpenAuth }) => {
               className="flex justify-center lg:justify-start"
             >
               <motion.button
-                onClick={onOpenAuth}
+                onClick={() => navigate('/auth')}
                 whileHover={{ 
                   scale: 1.05,
                   boxShadow: "0 0 30px rgba(239, 68, 68, 0.5)"
@@ -114,6 +116,7 @@ const Hero = ({ onOpenAuth }) => {
                   ease: "easeInOut" 
                 }}
                 className="bg-red-600 hover:bg-red-700 text-white font-bold text-xl px-12 py-5 rounded-full transition-all duration-300 shadow-lg hover:shadow-red-500/50"
+                type="button"
               >
                 Get Started
               </motion.button>
