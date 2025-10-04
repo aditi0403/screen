@@ -7,13 +7,15 @@ const AuthPage = () => {
   const navigate = useNavigate();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authType, setAuthType] = useState('login'); // 'login' or 'signup'
+  const [userRole, setUserRole] = useState(null); // 'agency' or 'client'
 
   const handleLoginClick = () => {
     setAuthType('login');
     setIsAuthModalOpen(true);
   };
 
-  const handleSignupClick = () => {
+  const handleSignupClick = (role) => {
+    setUserRole(role);
     setAuthType('signup');
     setIsAuthModalOpen(true);
   };
@@ -82,10 +84,11 @@ const AuthPage = () => {
         </motion.p>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
+        <div className="flex flex-col gap-8 justify-center items-center">
+          {/* Login Button */}
           <motion.button
-            initial={{ opacity: 0, x: -30, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ 
               delay: 0.5,
               type: 'spring', 
@@ -99,7 +102,7 @@ const AuthPage = () => {
             }}
             whileTap={{ scale: 0.95 }}
             onClick={handleLoginClick}
-            className="group relative w-72 bg-red-600 hover:bg-red-700 text-white font-bold text-xl py-5 px-10 rounded-full transition-all duration-300 shadow-2xl border-2 border-red-500 hover:border-red-400 overflow-hidden"
+            className="group relative w-80 bg-red-600 hover:bg-red-700 text-white font-bold text-xl py-5 px-10 rounded-full transition-all duration-300 shadow-2xl border-2 border-red-500 hover:border-red-400 overflow-hidden"
           >
             <span className="relative z-10">Login to Your Account</span>
             <motion.div
@@ -117,30 +120,76 @@ const AuthPage = () => {
             OR
           </motion.div>
 
-          <motion.button
-            initial={{ opacity: 0, x: 30, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ 
-              delay: 0.7,
-              type: 'spring', 
-              stiffness: 200, 
-              damping: 15 
-            }}
-            whileHover={{ 
-              scale: 1.05, 
-              boxShadow: '0 0 40px rgba(255, 255, 255, 0.3)',
-              y: -5
-            }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleSignupClick}
-            className="group relative w-72 bg-transparent border-2 border-white text-white hover:bg-white hover:text-black font-bold text-xl py-5 px-10 rounded-full transition-all duration-300 shadow-2xl overflow-hidden"
+          {/* Sign Up Options */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="text-center"
           >
-            <span className="relative z-10">Create New Account</span>
-            <motion.div
-              className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              initial={false}
-            />
-          </motion.button>
+            <h3 className="text-2xl font-semibold text-white mb-6">Register As</h3>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              {/* Agency Registration */}
+              <motion.button
+                initial={{ opacity: 0, x: -20, scale: 0.9 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ 
+                  delay: 0.8,
+                  type: 'spring', 
+                  stiffness: 200, 
+                  damping: 15 
+                }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  boxShadow: '0 0 30px rgba(239, 68, 68, 0.5)',
+                  y: -5
+                }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleSignupClick('agency')}
+                className="group relative w-72 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-lg py-6 px-8 rounded-2xl transition-all duration-300 shadow-2xl border-2 border-red-500 hover:border-red-400 overflow-hidden"
+              >
+                <div className="relative z-10">
+                  <div className="text-4xl mb-2">🏢</div>
+                  <div className="font-bold text-xl mb-1">Agency</div>
+                  <div className="text-sm text-red-100 font-normal">Provide LED Screens</div>
+                </div>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  initial={false}
+                />
+              </motion.button>
+
+              {/* Client Registration */}
+              <motion.button
+                initial={{ opacity: 0, x: 20, scale: 0.9 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ 
+                  delay: 0.9,
+                  type: 'spring', 
+                  stiffness: 200, 
+                  damping: 15 
+                }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  boxShadow: '0 0 30px rgba(255, 255, 255, 0.3)',
+                  y: -5
+                }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleSignupClick('client')}
+                className="group relative w-72 bg-transparent border-2 border-white text-white hover:bg-white hover:text-black font-bold text-lg py-6 px-8 rounded-2xl transition-all duration-300 shadow-2xl overflow-hidden"
+              >
+                <div className="relative z-10">
+                  <div className="text-4xl mb-2">💼</div>
+                  <div className="font-bold text-xl mb-1">Client</div>
+                  <div className="text-sm text-gray-200 group-hover:text-gray-700 font-normal">Advertise Your Business</div>
+                </div>
+                <motion.div
+                  className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  initial={false}
+                />
+              </motion.button>
+            </div>
+          </motion.div>
         </div>
 
         {/* Features Preview */}
@@ -176,8 +225,12 @@ const AuthPage = () => {
       {/* Auth Modal */}
       <AuthModal
         isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
+        onClose={() => {
+          setIsAuthModalOpen(false);
+          setUserRole(null);
+        }}
         initialTab={authType}
+        userRole={userRole}
         onLoginSuccess={() => {
           setIsAuthModalOpen(false);
         }}
