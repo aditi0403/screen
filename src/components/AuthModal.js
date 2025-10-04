@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import AgencyRegistration from './AgencyRegistration';
+import ClientRegistration from './ClientRegistration';
 
 const TabButton = ({ active, children, onClick }) => (
   <button
@@ -15,12 +17,12 @@ const TabButton = ({ active, children, onClick }) => (
   </button>
 );
 
-const ModalBackdrop = ({ onClose, children }) => (
+const ModalBackdrop = ({ onClose, children, large = false }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
-    className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center px-4"
+    className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center px-4 py-8 overflow-y-auto"
     onClick={onClose}
   >
     <motion.div
@@ -28,7 +30,7 @@ const ModalBackdrop = ({ onClose, children }) => (
       animate={{ scale: 1, y: 0, opacity: 1 }}
       exit={{ scale: 0.95, y: 20, opacity: 0 }}
       transition={{ type: 'spring', stiffness: 220, damping: 20 }}
-      className="w-full max-w-md rounded-2xl bg-white dark:bg-dark-900 text-gray-900 dark:text-white shadow-2xl"
+      className={`w-full ${large ? 'max-w-4xl' : 'max-w-md'} rounded-2xl bg-white dark:bg-dark-900 text-gray-900 dark:text-white shadow-2xl my-8`}
       onClick={(e) => e.stopPropagation()}
     >
       {children}
@@ -36,16 +38,20 @@ const ModalBackdrop = ({ onClose, children }) => (
   </motion.div>
 );
 
-const AuthModal = ({ isOpen, onClose, onLoginSuccess, initialTab = 'login' }) => {
+const AuthModal = ({ isOpen, onClose, onLoginSuccess, initialTab = 'login', userRole = null }) => {
   const navigate = useNavigate();
   const [tab, setTab] = useState(initialTab);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({ brand: '', email: '', password: '', confirm: '' });
   const [loading, setLoading] = useState(false);
+  const [showRegistration, setShowRegistration] = useState(false);
 
   useEffect(() => {
     setTab(initialTab);
-  }, [initialTab]);
+    if (initialTab === 'signup' && userRole) {
+      setShowRegistration(true);
+    }
+  }, [initialTab, userRole]);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -69,14 +75,35 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess, initialTab = 'login' }) =>
     }, 1000);
   };
 
+  const handleRegistrationComplete = (data) => {
+    console.log('Registration completed:', data);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      onClose?.();
+      navigate('/dashboard');
+    }, 1000);
+  };
+
+  const handleBackToLogin = () => {
+    setShowRegistration(false);
+    setTab('login');
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
-        <ModalBackdrop onClose={onClose}>
-          <div className="p-6">
+        <ModalBackdrop onClose={onClose} large={showRegistration && userRole}>
+          <div className="p-6 max-h-[90vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold">Welcome</h3>
+              <h3 className="text-xl font-bold">
+                {showRegistration && userRole 
+                  ? userRole === 'agency' 
+                    ? '🏢 Agency Registration' 
+                    : '💼 Client Registration'
+                  : 'Welcome'}
+              </h3>
               <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-800">
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -85,15 +112,32 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess, initialTab = 'login' }) =>
               </button>
             </div>
 
-            {/* Tabs */}
-            <div className="flex items-center gap-2 mb-6">
-              <TabButton active={tab === 'login'} onClick={() => setTab('login')}>Login</TabButton>
-              <TabButton active={tab === 'signup'} onClick={() => setTab('signup')}>Signup</TabButton>
-            </div>
+            {/* Tabs - Only show if not in registration flow */}
+            {!showRegistration && (
+              <div className="flex items-center gap-2 mb-6">
+                <TabButton active={tab === 'login'} onClick={() => setTab('login')}>Login</TabButton>
+                <TabButton active={tab === 'signup'} onClick={() => setTab('signup')}>Signup</TabButton>
+              </div>
+            )}
 
             {/* Forms */}
             <div>
-              {tab === 'login' ? (
+              {showRegistration && userRole ? (
+                // Registration Flow
+                <>
+                  {userRole === 'agency' ? (
+                    <AgencyRegistration 
+                      onComplete={handleRegistrationComplete}
+                      onBack={handleBackToLogin}
+                    />
+                  ) : (
+                    <ClientRegistration 
+                      onComplete={handleRegistrationComplete}
+                      onBack={handleBackToLogin}
+                    />
+                  )}
+                </>
+              ) : tab === 'login' ? (
                 <form onSubmit={handleLoginSubmit} className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">Email</label>
